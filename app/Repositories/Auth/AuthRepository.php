@@ -3,6 +3,7 @@
 namespace App\Repositories\Auth;
 
 use App\Events\UserRegistered;
+use App\Models\PasswordReset;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
@@ -89,5 +90,15 @@ class AuthRepository extends BaseRepository
         $user->activation_token = '';
         $user->save();
         return $user;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function forget(array $data)
+    {
+        $data['token'] = str_random(60);
+        return PasswordReset::create($data);
     }
 }

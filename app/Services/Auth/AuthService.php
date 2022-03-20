@@ -2,7 +2,9 @@
 
 namespace App\Services\Auth;
 
+use App\Events\PasswordResetRequest;
 use App\Repositories\Auth\AuthRepository;
+use App\Repositories\Auth\ForgetPasswordRepository;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,22 +13,30 @@ use Illuminate\Support\Str;
 use Exception;
 use InvalidArgumentException;
 use Laravel\Passport\PersonalAccessTokenResult;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthService
 {
     /**
-     * @var UserTransformer
+     * @var AuthRepository
      */
     private AuthRepository $repository;
+    /**
+     * @var ForgetPasswordRepository
+     */
+    private ForgetPasswordRepository $forgetPasswordRepository;
 
     /**
-     * @var AuthRepository
+     * @param AuthRepository $repository
+     * @param ForgetPasswordRepository $forgetPasswordRepository
      */
 
     public function __construct(
-        AuthRepository $repository
+        AuthRepository $repository,
+        ForgetPasswordRepository $forgetPasswordRepository
     ) {
         $this->repository = $repository;
+        $this->forgetPasswordRepository = $forgetPasswordRepository;
     }
     /**
      * @param array $data
@@ -78,6 +88,28 @@ class AuthService
         $this->repository->logout($request);
         Log::info(__METHOD__ . " -- user: " . auth()->user()->email . " -- User logout success");
     }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function forget(array $data)
+    {
+        $user = $this->repository->getColumnData('email',$data['email']);
+        if(!$user){
+            throw new NotFoundHttpException(trans('exception.user_not_found'));
+        }
+        $result = $this->repository->forget($data);
+        $data = [
+            'user' => $user,
+            'token' => $result['token'],
+        ];
+
+        Log::info(__METHOD__ . " -- user: " . $user->email . " -- User forget password request");
+
+        PasswordResetRequest::dispatch($data['user'],$data['token']);
+    }
+
     /**
      * @param $token
      * @return User|null
@@ -95,5 +127,16 @@ class AuthService
         Log::info(__METHOD__ . " -- user: " . $user->email . " -- User email verification success");
         return $user;
     }
+
+    /**
+     * check reset password link token and validate
+     * @param string $token
+     * @return mixed
+     */
+    public function validateTokenAndGetUser(string $token)
+    {
+        return $this->forgetPasswordRepository->validateTokenAndGetUser($token);
+    }
+
 
 }
