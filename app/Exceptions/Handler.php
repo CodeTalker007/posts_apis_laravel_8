@@ -4,7 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Handler extends ExceptionHandler
 {
     /**
@@ -22,9 +25,6 @@ class Handler extends ExceptionHandler
      * @var array<int, string>
      */
     protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
     ];
 
     /**
@@ -34,8 +34,42 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (ValidationException $exception, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => trans('exception.validation'),
+                'errors' => $exception->errors()
+            ], 422);
+        });
+
+        $this->renderable(function (AuthenticationException $exception, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => trans('exception.unauthorized'),
+                'errors' => []
+            ], 401);
+        });
+        $this->renderable(function (NotFoundHttpException $exception, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => trans('exception.user_not_found'),
+                'errors' => []
+            ], 404);
+        });
+        $this->renderable(function (AccessDeniedHttpException $exception, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => trans($exception->getMessage()),
+                'errors' => []
+            ], $exception->getStatusCode());
+        });
+
+        $this->renderable(function (ErrorException $exception, $request) {
+            return response()->json([
+                'success' => false,
+                'message' => trans($exception->getName(), $exception->getParams()),
+                'errors' => $exception->getParams()
+            ], $exception->getStatusCode());
         });
     }
 }
