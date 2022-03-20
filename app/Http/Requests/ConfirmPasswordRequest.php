@@ -13,7 +13,7 @@ class ConfirmPasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class ConfirmPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'token' => 'required|string',
+            'password' => 'min:8|string|required_with:c_password|same:c_password',
+            'c_password' => 'min:8',
         ];
     }
 }

@@ -135,7 +135,26 @@ class AuthService
      */
     public function validateTokenAndGetUser(string $token)
     {
+        Log::info(__METHOD__ . " -- user: " . $token . " -- User token validation request");
         return $this->forgetPasswordRepository->validateTokenAndGetUser($token);
+    }
+
+    /**
+     * Confirm and change user password
+     * @param array $data
+     * @return null
+     */
+    public function confirm(array $data)
+    {
+        Log::info(__METHOD__ . " -- user: " . $data['token'] . " -- User password change request");
+        $passwordReset = $this->forgetPasswordRepository->getColumnData('token',$data['token']);
+        if (!isset($passwordReset)) {
+            return null;
+        }
+        $this->forgetPasswordRepository->removeAllPasswordResetToken($passwordReset['email']);
+        return $passwordReset->user()->update([
+            'password' => bcrypt($data['password']),
+        ]);
     }
 
 
