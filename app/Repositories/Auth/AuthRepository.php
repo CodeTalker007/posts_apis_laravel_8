@@ -5,6 +5,10 @@ namespace App\Repositories\Auth;
 use App\Events\UserRegistered;
 use App\Models\User;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Laravel\Passport\PersonalAccessTokenResult;
 
 class AuthRepository extends BaseRepository
 {
@@ -23,6 +27,38 @@ class AuthRepository extends BaseRepository
         $user = $this->model->create($userData);
         UserRegistered::dispatch($user);
         return $user;
+    }
+    /**
+     * @param string $email
+     * @param string $password
+     * @return bool
+     */
+    public function validateUser(string $email, string $password): bool
+    {
+        return Auth::attempt([
+            'email' => $email,
+            'password' => $password,
+        ]);
+    }
+    /**
+     * @param User $user
+     * @param $rememberMe
+     * @return PersonalAccessTokenResult
+     */
+    public function createUserToken(array $data, $rememberMe): PersonalAccessTokenResult
+    {
+        $user = User::where('email', $data['email'])->first();
+        $tokenResult = $user->createToken(env('APP_PERSONAL_TOKEN'));
+        $token = $tokenResult->token;
+        if ($rememberMe) {
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+
+        $token->save();
+
+        Log::info(__METHOD__ . " -- User login success: ", ["email" => $user->email, "token_expires_at" => $token->expires_at]);
+
+        return $tokenResult;
     }
 
     /**

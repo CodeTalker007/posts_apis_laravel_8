@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Exception;
 use InvalidArgumentException;
+use Laravel\Passport\PersonalAccessTokenResult;
+
 class AuthService
 {
     /**
@@ -50,6 +52,22 @@ class AuthService
         }
 
         DB::commit();
+    }
+    /**
+     * @param array $data
+     * @return PersonalAccessTokenResult|null
+     * @throws ErrorException
+     */
+    public function login(array $data): ?PersonalAccessTokenResult
+    {
+        Log::info(__METHOD__ . " -- Consumer login attempt: ", ["email" => $data["email"]]);
+
+        if (!$this->repository->validateUser($data['email'], $data['password'])) {
+            Log::error(__METHOD__ . " -- User entered wrong email or password. ", ["email" => $data["email"]]);
+            return null;
+        }
+
+        return $this->repository->createUserToken($data, $data['remember_me'] ?? null);
     }
     /**
      * @param $token

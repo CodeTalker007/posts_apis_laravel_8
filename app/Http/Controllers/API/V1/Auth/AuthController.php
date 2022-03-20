@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1\Auth;
 use App\Exceptions\ErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Transformers\User\TokenTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\Auth\AuthService;
@@ -39,6 +41,16 @@ class AuthController extends Controller
             throw new ErrorException($exception->getMessage(), [], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+    }
+    /**
+     * @throws ErrorException
+     */
+    public function login(UserLoginRequest $request): JsonResponse
+    {
+        if (!$token = $this->service->login($request->validated())) {
+            throw new ErrorException('exception.invalid_credentials', [], Response::HTTP_UNAUTHORIZED);
+        }
+        return $this->success($token, new TokenTransformer, trans('messages.user_login_success'));
     }
     /**
      * Verify user url

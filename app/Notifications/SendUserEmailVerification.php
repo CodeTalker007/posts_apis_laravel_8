@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
 
-class SendUserEmailVerification extends Notification
+class SendUserEmailVerification extends Notification implements ShouldQueue
 {
     use Queueable;
 
