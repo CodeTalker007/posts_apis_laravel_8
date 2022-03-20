@@ -6,6 +6,7 @@ use App\Events\UserRegistered;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Laravel\Passport\PersonalAccessTokenResult;
@@ -59,6 +60,14 @@ class AuthRepository extends BaseRepository
         Log::info(__METHOD__ . " -- User login success: ", ["email" => $user->email, "token_expires_at" => $token->expires_at]);
 
         return $tokenResult;
+    }
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function logout(Request $request)
+    {
+        return $request->user()->token()->delete();
     }
 
     /**

@@ -53,6 +53,15 @@ class AuthController extends Controller
         return $this->success($token, new TokenTransformer, trans('messages.user_login_success'));
     }
     /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $this->service->logout($request);
+        return $this->success([], null, trans('messages.user_logout_success'));
+    }
+    /**
      * Verify user url
      * @param $token
      * @return RedirectResponse

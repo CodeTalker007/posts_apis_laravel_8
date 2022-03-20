@@ -4,6 +4,7 @@ namespace App\Services\Auth;
 
 use App\Repositories\Auth\AuthRepository;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -68,6 +69,14 @@ class AuthService
         }
 
         return $this->repository->createUserToken($data, $data['remember_me'] ?? null);
+    }
+    /**
+     * @param Request $request
+     */
+    public function logout(Request $request): void
+    {
+        $this->repository->logout($request);
+        Log::info(__METHOD__ . " -- user: " . auth()->user()->email . " -- User logout success");
     }
     /**
      * @param $token
