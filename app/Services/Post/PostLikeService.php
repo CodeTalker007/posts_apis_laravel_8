@@ -19,6 +19,14 @@ class PostLikeService
         $postLike = $this->preparePostLikePayload($postId);
        return $this->postLikeRepository->create($postLike);
     }
+
+    /**
+     * @param $postId
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function unlikePost($postId){
+        return $this->postLikeRepository->deletePostLike($postId);
+    }
     public function preparePostLikePayload($postId): array
     {
         return [

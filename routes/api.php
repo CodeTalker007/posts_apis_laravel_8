@@ -26,13 +26,15 @@ Route::prefix('forget-password')->name('forget-password.')->group(function () {
     Route::get('{token}', [ForgetPasswordController::class, 'reset'])->name('reset');
     Route::post('confirm', [ForgetPasswordController::class, 'confirm']);
 });
+Route::post('/posts', [PostController::class, 'create'])->name('create');
 Route::group(['middleware' => ['auth:api']],function () {
     Route::prefix('posts')->name('post.')->group(function () {
-        Route::post('/', [PostController::class, 'create'])->name('create');
+
         Route::get('/', [PostController::class, 'index'])->name('index');
         Route::put('/{post}', [PostController::class, 'update'])->name('update');
         Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
         Route::get('/{post}', [PostController::class, 'show'])->name('show');
     });
-    Route::post('post/{post}/like', [\App\Http\Controllers\API\V1\Post\PostLikeController::class, 'likePost'])->name('like');
+    Route::get('post/{post}/like', [\App\Http\Controllers\API\V1\Post\PostLikeController::class, 'likePost'])->name('like');
+    Route::get('post/{post}/unlike', [\App\Http\Controllers\API\V1\Post\PostLikeController::class, 'unlikePost'])->name('unlike');
 });

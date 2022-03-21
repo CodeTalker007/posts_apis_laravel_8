@@ -21,6 +21,11 @@ class PostLikeController extends Controller
     public function __construct(PostLikeService $postLikeService){
         $this->postLikeService = $postLikeService;
     }
+
+    /**
+     * @param Post $post
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function likePost(Post $post): \Illuminate\Http\JsonResponse
     {
         try{
@@ -29,6 +34,21 @@ class PostLikeController extends Controller
         }
         catch (\Exception $exception){
             return $this->failure('', trans('messages.post_like_failed'),Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @param Post $post
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unlikePost(Post $post): \Illuminate\Http\JsonResponse
+    {
+        try{
+            $this->postLikeService->unlikePost($post->id);
+            return $this->success([], null, trans('messages.post_unlike_success'));
+        }
+        catch (\Exception $exception){
+            return $this->failure('', trans('messages.post_unlike_failed'),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -101,6 +101,6 @@ class BaseRepository implements BaseContract
      */
     public function findOrFail($id)
     {
-        return $this->model->with('')findOrFail($id);
+        return $this->model->findOrFail($id);
     }
 }
