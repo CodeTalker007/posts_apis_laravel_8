@@ -46,7 +46,9 @@ class PostService
         ];
     }
     public function index(){
-        return $posts = $this->postRepository->getAll(['postLikes.user'],true);
+        return $posts = $this->postRepository->getAll(['user','postLikes.user'=>function($likeUser){
+            $likeUser->latest()->take(5);
+        }],true,'date');
        // return $this->paginate($posts);
 
     }
@@ -77,7 +79,7 @@ class PostService
      * @return mixed
      */
     public function show($id){
-        return $this->postRepository->findOrFail($id);
+        return $this->postRepository->find($id,['user','postLikes.user']);
     }
 
 }

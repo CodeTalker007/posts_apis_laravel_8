@@ -19,9 +19,9 @@ class BaseRepository implements BaseContract
      * @param mixed $id
      * @return Model
      */
-    public function find($id)
+    public function find($id,array $relations = [])
     {
-        return $this->model->find($id);
+        return $this->model->with($relations)->get()->find($id);
     }
 
     /**
@@ -62,10 +62,10 @@ class BaseRepository implements BaseContract
      * @param array $relations
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
-    public function getAll(array $relations = [],$paginate=false)
+    public function getAll(array $relations = [],$paginate=false,$orderByField='id')
     {
         if($paginate){
-            return $this->model->with($relations)->paginate(5);
+            return $this->model->with($relations)->orderBy($orderByField, 'desc')->paginate(5);
         }
         return $this->model->with($relations)->get();
     }
