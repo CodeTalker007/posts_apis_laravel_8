@@ -11,7 +11,19 @@ return [
     |
      */
 
-    'user_create_success' => 'Consumer created successfully',
+    'user_create_success' => 'User created successfully',
+    'post_create_success' => 'Post created successfully',
+    'post_update_success' => 'Post update successfully',
+    'post_delete_success' => 'Post delete successfully',
+    'post_get_all_success' => 'Get all post success',
+    'post_get_success' => 'Get single post success',
+    'post_like_success' => 'User Liked the post',
+    'post_like_failed' => 'User post like failed',
+    'post_get_failed' => 'Get single post failed',
+    'post_get_all_failed'=>'Get All post failed',
+    'post_create_failed' => 'Post created failed',
+    'post_delete_failed' => 'Post created failed',
+    'post_update_failed' => 'Post created failed',
     'user_email_verification_success'=>'User email verification success',
     'user_email_verification_failed'=>'User email cant be verified',
     'user_login_success' => 'User logged in successfully',

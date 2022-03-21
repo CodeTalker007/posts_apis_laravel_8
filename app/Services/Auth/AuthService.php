@@ -39,6 +39,7 @@ class AuthService
         $this->forgetPasswordRepository = $forgetPasswordRepository;
     }
     /**
+    /**
      * @param array $data
      */
     public function register(array $data): void

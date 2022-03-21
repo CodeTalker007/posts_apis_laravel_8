@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $exception, $request) {
             return response()->json([
                 'success' => false,
-                'message' => trans('exception.user_not_found'),
+                'message' => trans('exception.entity_not_found'),
                 'errors' => []
             ], 404);
         });

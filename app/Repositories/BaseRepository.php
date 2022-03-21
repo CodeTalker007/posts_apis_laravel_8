@@ -62,8 +62,11 @@ class BaseRepository implements BaseContract
      * @param array $relations
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
-    public function getAll(array $relations = [])
+    public function getAll(array $relations = [],$paginate=false)
     {
+        if($paginate){
+            return $this->model->with($relations)->paginate(5);
+        }
         return $this->model->with($relations)->get();
     }
 
@@ -98,6 +101,6 @@ class BaseRepository implements BaseContract
      */
     public function findOrFail($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->with('')findOrFail($id);
     }
 }

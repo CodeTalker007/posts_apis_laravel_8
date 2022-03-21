@@ -332,7 +332,7 @@
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td class="logo" style="text-align: center;">
-                                <h1><a href="#">Welcome to Millions Password Reset.</a></h1>
+                                <h1><a href="#">Hurrah new post have been created.</a></h1>
                             </td>
                         </tr>
                     </table>
@@ -349,9 +349,8 @@
                         <tr>
                             <td>
                                 <div class="text" style="padding: 0 2.5em; text-align: center;">
-                                    <h2>Please Reset your password</h2>
-                                    <h3>Dear {{$userName}} this an email from Millions. Kindly click on the following button to reset your password</h3>
-{{--                                    <p><a href="{{$url}}" class="btn btn-primary">Reset Password</a></p>--}}
+                                    <h2>New Post Created</h2>
+                                    <h3>User {{$userName}} created a new post for you. Kindly have look</h3>
                                 </div>
                             </td>
                         </tr>
@@ -360,6 +359,7 @@
             </tr><!-- end tr -->
             <!-- 1 Column Text + Button : END -->
         </table>
+
     </div>
 </div>
 </body>

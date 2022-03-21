@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Http\Traits\HasUuid;
+use App\Http\Traits\ModelMethods\PostMethod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid, PostMethod;
     protected $table='posts';
     protected $fillable=[
         'image',

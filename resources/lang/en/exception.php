@@ -14,5 +14,5 @@ return [
     'invalid_credentials' => 'Invalid Credentials',
     'validation' => 'Validation Error',
     'unauthorized' => 'You do not have the required authorization.',
-    'user_not_found' => 'We can\'t find a record for this id',
+    'entity_not_found' => 'Entity not found',
 ];

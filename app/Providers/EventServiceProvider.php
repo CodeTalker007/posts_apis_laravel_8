@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\PasswordResetRequest;
+use App\Events\PostCreated;
 use App\Events\UserRegistered;
 use App\Listeners\NotifyPasswordResetRequest;
 use App\Listeners\SendEmailVerificationNotification;
+use App\Listeners\SendPostCreationNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -24,6 +26,9 @@ class EventServiceProvider extends ServiceProvider
         PasswordResetRequest::class=>[
             NotifyPasswordResetRequest::class
         ],
+        PostCreated::class=>[
+            SendPostCreationNotification::class
+        ]
     ];
 
     /**

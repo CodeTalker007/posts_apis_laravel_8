@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V1\Auth\AuthController;
 use App\Http\Controllers\API\V1\Auth\ForgetPasswordController;
+use App\Http\Controllers\API\V1\Post\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,14 @@ Route::prefix('forget-password')->name('forget-password.')->group(function () {
     Route::post('', [ForgetPasswordController::class, 'forget']);
     Route::get('{token}', [ForgetPasswordController::class, 'reset'])->name('reset');
     Route::post('confirm', [ForgetPasswordController::class, 'confirm']);
+});
+Route::group(['middleware' => ['auth:api']],function () {
+    Route::prefix('posts')->name('post.')->group(function () {
+        Route::post('/', [PostController::class, 'create'])->name('create');
+        Route::get('/', [PostController::class, 'index'])->name('index');
+        Route::put('/{post}', [PostController::class, 'update'])->name('update');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
+        Route::get('/{post}', [PostController::class, 'show'])->name('show');
+    });
+    Route::post('post/{post}/like', [\App\Http\Controllers\API\V1\Post\PostLikeController::class, 'likePost'])->name('like');
 });

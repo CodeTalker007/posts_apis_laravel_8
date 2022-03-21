@@ -3,6 +3,7 @@
 namespace App\Http\Traits\ModelMethods;
 
 use App\Models\Post;
+use App\Models\PostLike;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait UserMethod
@@ -14,5 +15,9 @@ trait UserMethod
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class,'author','id');
+    }
+    public function postLikes(): HasMany
+    {
+        return $this->hasMany(PostLike::class,'user_id','id');
     }
 }
