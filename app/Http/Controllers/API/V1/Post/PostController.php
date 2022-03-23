@@ -22,6 +22,7 @@ class PostController extends Controller
      */
     public function __construct(PostService $postService){
         $this->postService = $postService;
+        $this->middleware('auth:api');
     }
 
     /**
@@ -46,9 +47,11 @@ class PostController extends Controller
     {
         try{
             $posts =$this->postService->index();
+
             return $this->success($posts, new PostTransformer(), trans('messages.post_get_all_success'));
         }
         catch (\Exception $exception){
+            dd($exception);
             return $this->failure('', trans('messages.post_get_all_failed'),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 

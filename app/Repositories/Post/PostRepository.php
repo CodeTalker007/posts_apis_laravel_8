@@ -24,7 +24,7 @@ class PostRepository extends BaseRepository
     {
         $disk = config('filesystems.default');
         $destinationPath = "user-posts";
-        $fileName = md5($file->getClientOriginalName() . time()). $file->clientExtension();
+        $fileName = md5($file->getClientOriginalName() . time()) . '.' . $file->clientExtension();
 //        if(Storage::disk($disk)->exists($destinationPath.'/'.$fileName)){
 //            Storage::disk($disk)->delete($destinationPath.'/'.$fileName);
 //        }

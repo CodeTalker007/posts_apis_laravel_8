@@ -17,8 +17,8 @@ class PostTransformer extends BaseTransformer
         });
         $postLikes = $post->postLikes;
         if(count($postLikes)>0){
-            $postLikes = $postLikes->user->map(function ($user) {
-                return collect($user->toArray())->except(['id', 'created_at', 'updated_at'])->map(function ($item) {
+            $postLikes = $postLikes->map(function ($postLike) {
+                return collect($postLike->user->toArray())->except(['id', 'created_at', 'updated_at'])->map(function ($item) {
                     return $item ?? "";
                 });
             });
